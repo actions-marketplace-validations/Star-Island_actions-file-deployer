@@ -57,7 +57,6 @@ inputs:
     description: "Remote path on host"
     required: true
     default: .
-    pattern: "^\\/.+$"
   sync:
     description: "File synchronization (delta, full)"
     required: true
