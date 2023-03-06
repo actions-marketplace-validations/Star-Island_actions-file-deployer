@@ -1,4 +1,4 @@
-name: "FTP/SFTP file deployer"
+name: "FTP/SFTP file deployer edited for StarIsland"
 
 description: "Fast and customizable deployment with parallel connections and proxy support. Deploy only changed files or do full sync."
 
