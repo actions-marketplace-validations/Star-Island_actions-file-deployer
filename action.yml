@@ -1,4 +1,4 @@
-name: "FTP/SFTP file deployer edited for StarIsland"
+name: "FTP/SFTP file deployer"
 
 description: "Fast and customizable deployment with parallel connections and proxy support. Deploy only changed files or do full sync."
 
@@ -128,7 +128,7 @@ runs:
 
         echo "Initialize inputs"
 
-        remote_path_unslash="${{inputs.remote-path}}"
+        remote_path_unslash=$(realpath --canonicalize-missing '${{inputs.remote-path}}')
         remote_path_slash="${remote_path_unslash}/"
 
         input_remote_password="${{inputs.remote-password}}"
@@ -351,7 +351,7 @@ runs:
             ${{inputs.ftp-post-sync-commands}}"
         else
           ${proxy_cmd} lftp -c "put -O \"${remote_path_unslash}\" .deploy-running
-            mput -d -O \"${remote_path_unslash}\" .deploy-revision $(awk 'ORS=" " { print "\"" $0 "\"" }' ~/files_to_upload)
+            mput -d -O \"${remote_path_unslash}\" .deploy-revision $(awk -v REMOTEPATH=\"${remote_path_slash}\" 'ORS=" " { print "\"" REMOTEPATH $0 "\"" } ~/files_to_upload) 
             rm -f \"${remote_path_slash}.deploy-check\" $(awk -v REMOTEPATH=\"${remote_path_slash}\" 'ORS=" " { print "\"" REMOTEPATH $0 "\"" }' ~/files_to_delete)
             rm -f \"${remote_path_slash}.deploy-running\"
             ${{inputs.ftp-post-sync-commands}}"
